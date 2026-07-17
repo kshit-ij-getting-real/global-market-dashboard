@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - global-market-dashboard-export.zip.b64
+      - import.ready
 
 permissions:
   contents: write
@@ -17,12 +17,13 @@ jobs:
       - name: Unpack project
         shell: bash
         run: |
-          if [ ! -f global-market-dashboard-export.zip.b64 ]; then
+          if [ ! -f import.ready ]; then
             exit 0
           fi
+          cat archive.part-* > global-market-dashboard-export.zip.b64
           base64 --decode global-market-dashboard-export.zip.b64 > global-market-dashboard-export.zip
           unzip -o global-market-dashboard-export.zip -d .
-          rm global-market-dashboard-export.zip global-market-dashboard-export.zip.b64
+          rm global-market-dashboard-export.zip global-market-dashboard-export.zip.b64 import.ready archive.part-*
       - name: Commit imported files
         shell: bash
         run: |
